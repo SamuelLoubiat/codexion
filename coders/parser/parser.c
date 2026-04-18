@@ -25,12 +25,11 @@ static int	check_nb(char *nbr)
 	return (1);
 }
 
-int	show_help(void)
+void	show_help(void)
 {
 	printf("./codexion <coders> <time_to_burnout> ");
 	printf("<time_to_compile> <time_to_debug> <time_to_refactor> ");
 	printf("<nb_compiles_required> <dongle_cooldown> <scheduler>\n");
-	return (0);
 }
 
 t_config	*parse(int argc, char **argv)
@@ -38,7 +37,10 @@ t_config	*parse(int argc, char **argv)
 	t_config	*config;
 
 	if (argc < 9)
+	{
 		show_help();
+		return (0);
+	}
 	config = (t_config *) malloc(sizeof(t_config));
 	if (!config)
 		return (0);
