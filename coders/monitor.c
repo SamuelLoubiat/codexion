@@ -6,7 +6,7 @@
 /*   By: sloubiat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 02:56:08 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/18 19:52:07 by sloubiat         ###   ########lyon.fr   */
+/*   Updated: 2026/04/18 20:20:03 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,10 @@ static int	check_burnout(t_coders *coders, t_arg *arg)
 		!= arg->config->number_compile)
 	{
 		set_burnout(arg);
-		pthread_mutex_unlock(coders->coder_mutex);
+		pthread_mutex_unlock(&coders->coder_mutex);
 		return (1);
 	}
-	pthread_mutex_unlock(coders->coder_mutex);
+	pthread_mutex_unlock(&coders->coder_mutex);
 	return (0);
 }
 
