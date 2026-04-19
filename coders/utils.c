@@ -26,7 +26,6 @@ int	has_burned(t_arg *arg)
 	if (arg->config->burned)
 	{
 		pthread_mutex_unlock(&arg->config->mutex_burn);
-		free(arg);
 		return (1);
 	}
 	pthread_mutex_unlock(&arg->config->mutex_burn);

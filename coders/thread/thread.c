@@ -60,18 +60,19 @@ int	select_dongle(t_arg *arg, t_dongle *first, t_dongle *second)
 	return (1);
 }
 
-void	debug_refactor(t_arg *arg, t_coders *coders)
+int	debug_refactor(t_arg *arg, t_coders *coders)
 {
 	if (has_burned(arg))
-		return ;
+		return (0);
 	ft_put_str("%d %d is debugging\n",
 		coders->id, ft_get_time() - arg->start, arg);
 	usleep((unsigned int) arg->config->time_debug * 1000);
 	if (has_burned(arg))
-		return ;
+		return (0);
 	ft_put_str("%d %d is refactoring\n",
 		coders->id, ft_get_time() - arg->start, arg);
 	usleep((unsigned int) arg->config->time_refactor * 1000);
+	return (1);
 }
 
 void	thread(t_arg *arg)
@@ -91,12 +92,12 @@ void	thread(t_arg *arg)
 	if (has_burned(arg))
 		return ;
 	if (arg->config->number_compile == arg->coder->number_compile
-		|| !select_dongle(arg, first, second))
+		|| !select_dongle(arg, first, second)
+		|| !debug_refactor(arg, arg->coder))
 	{
 		free(arg);
 		return ;
 	}
-	debug_refactor(arg, arg->coder);
 	if (arg->coder->number_compile < arg->config->number_compile)
 		thread(arg);
 	else

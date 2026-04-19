@@ -64,7 +64,7 @@ static int	check_burnout(t_coders *coders, t_arg *arg)
 		< ft_get_time() - arg->start && coders->number_compile
 		!= arg->config->number_compile)
 	{
-		set_burnout(arg);
+		set_burnout(coders, arg);
 		pthread_mutex_unlock(&coders->coder_mutex);
 		return (1);
 	}

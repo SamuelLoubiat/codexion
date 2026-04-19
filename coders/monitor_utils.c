@@ -33,11 +33,11 @@ void	unlock_mutex(t_coders *coders)
 	pthread_mutex_unlock(&coders->next->coder_mutex);
 }
 
-void	set_burnout(t_arg *arg)
+void	set_burnout(t_coders *coders, t_arg *arg)
 {
 	pthread_mutex_lock(&arg->config->mutex_burn);
 	arg->config->burned = 1;
 	ft_put_str("%d %d burned out\n",
-		arg->coder->id, ft_get_time() - arg->start, arg);
+		coders->id, ft_get_time() - arg->start, arg);
 	pthread_mutex_unlock(&arg->config->mutex_burn);
 }

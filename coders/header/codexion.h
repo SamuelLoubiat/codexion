@@ -97,7 +97,7 @@ void		monitor(t_arg *arg);
 void		swap(int *queue);
 void		lock_mutex(t_coders *coders);
 void		unlock_mutex(t_coders *coders);
-void		set_burnout(t_arg *arg);
+void		set_burnout(t_coders *coders, t_arg *arg);
 
 // thread
 void		thread(t_arg *arg);
