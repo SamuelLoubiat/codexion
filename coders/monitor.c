@@ -6,7 +6,7 @@
 /*   By: sloubiat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 02:56:08 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/20 18:19:11 by sloubiat         ###   ########lyon.fr   */
+/*   Updated: 2026/04/20 18:46:22 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,12 @@ void	monitor(t_arg *arg)
 		if (arg->config->edf)
 			sort_dongle(arg);
 		if (check_all_coders(arg))
+		{
+			pthread_mutex_lock(&arg->config->mutex_burn);
+			arg->config->end = 1;
+			pthread_mutex_unlock(&arg->config->mutex_burn);
 			break ;
+		}
 		usleep(100);
 	}
 }

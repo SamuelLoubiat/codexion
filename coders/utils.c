@@ -6,7 +6,7 @@
 /*   By: sloubiat <sloubiat@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 02:29:01 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/20 18:19:25 by sloubiat         ###   ########lyon.fr   */
+/*   Updated: 2026/04/20 18:46:32 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	has_burned(t_arg *arg)
 int	has_finish(t_arg *arg, t_coders *coder)
 {
 	pthread_mutex_lock(&coder->coder_mutex);
-	if (arg->config->number_compile == coder->number_compile)
+	if (arg->config->number_compile <= coder->number_compile)
 	{
 		pthread_mutex_unlock(&coder->coder_mutex);
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: sloubiat <sloubiat@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 16:49:13 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/20 18:18:36 by sloubiat         ###   ########lyon.fr   */
+/*   Updated: 2026/04/20 18:45:57 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_config
 	int				dongle_cooldown;
 	int				burned;
 	int				edf;
+	int				end;
 	pthread_mutex_t	mutex_console;
 	pthread_mutex_t	mutex_burn;
 }	t_config;

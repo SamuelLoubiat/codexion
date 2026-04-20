@@ -6,7 +6,7 @@
 /*   By: sloubiat <sloubiat@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 16:41:47 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/20 18:19:00 by sloubiat         ###   ########lyon.fr   */
+/*   Updated: 2026/04/20 18:46:06 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,15 +92,24 @@ void	thread(t_arg *arg)
 	}
 	if (has_burned(arg))
 		return ;
-	if (arg->config->number_compile == arg->coder->number_compile
-		|| !select_dongle(arg, first, second)
-		|| !debug_refactor(arg, arg->coder))
+	if (/*arg->config->number_compile == arg->coder->number_compile
+		||*/ !select_dongle(arg, first, second))
 	{
 		free(arg);
 		return ;
 	}
-	if (arg->coder->number_compile < arg->config->number_compile)
-		thread(arg);
-	else
+	pthread_mutex_lock(&arg->config->mutex_burn);
+	if (arg->config->end)
+	{
 		free(arg);
+		pthread_mutex_unlock(&arg->config->mutex_burn);
+		return ;
+	}
+	pthread_mutex_unlock(&arg->config->mutex_burn);
+	if (!debug_refactor(arg, arg->coder))
+	{
+		free(arg);
+		return ;
+	}
+	thread(arg);
 }

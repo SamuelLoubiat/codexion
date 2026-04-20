@@ -6,7 +6,7 @@
 /*   By: sloubiat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 00:29:01 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/18 01:30:34 by sloubiat         ###   ########.fr       */
+/*   Updated: 2026/04/20 18:46:14 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 #include "header/codexion.h"
@@ -87,6 +87,7 @@ void	init_config(t_config *config, char **argv)
 	config->number_compile = ft_atoi(argv[6]);
 	config->dongle_cooldown = ft_atoi(argv[7]);
 	config->burned = 0;
+	config->end = 0;
 	pthread_mutex_init(&config->mutex_console, NULL);
 	pthread_mutex_init(&config->mutex_burn, NULL);
 	if (ft_strcmp(argv[8], "edf") == 0)
