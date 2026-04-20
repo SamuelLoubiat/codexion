@@ -6,7 +6,7 @@
 /*   By: sloubiat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 02:56:08 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/18 20:20:03 by sloubiat         ###   ########lyon.fr   */
+/*   Updated: 2026/04/20 18:19:11 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ static void	swap_queue(t_arg *arg, int *queue)
 {
 	t_coders	*curr;
 
+	curr = arg->coder;
 	if (queue[0] > queue[1])
 	{
-		while (arg->coder->id != queue[1])
-			arg->coder = arg->coder->next;
-		curr = arg->coder;
+		while (curr->id != queue[1])
+			curr = curr->next;
 		lock_mutex(curr);
 		if (curr->last_use == curr->next->last_use
 			|| curr->last_use < curr->next->last_use)
@@ -29,9 +29,8 @@ static void	swap_queue(t_arg *arg, int *queue)
 	}
 	else
 	{
-		while (arg->coder->id != queue[0])
-			arg->coder = arg->coder->next;
-		curr = arg->coder;
+		while (curr->id != queue[0])
+			curr = curr->next;
 		lock_mutex(curr);
 		if (curr->last_use > curr->next->last_use)
 			swap(queue);

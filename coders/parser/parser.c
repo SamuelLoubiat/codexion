@@ -6,7 +6,7 @@
 /*   By: sloubiat <sloubiat@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 15:47:43 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/18 01:31:55 by sloubiat         ###   ########.fr       */
+/*   Updated: 2026/04/20 18:18:50 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	check_nb(char *nbr)
 	if (nb == 0)
 		if (ft_strcmp(nbr, "0") && ft_strcmp(nbr, "-0") && ft_strcmp(nbr, "+0"))
 			return (0);
-	if (nb <= 0)
+	if (nb < 0)
 		return (0);
 	return (1);
 }

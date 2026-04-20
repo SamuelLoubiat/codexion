@@ -6,7 +6,7 @@
 /*   By: sloubiat <sloubiat@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 16:49:13 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/19 17:56:14 by sloubiat         ###   ########lyon.fr   */
+/*   Updated: 2026/04/20 18:18:36 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void		free_coders(t_coders *coders);
 void		free_dongles(t_dongle *dongles);
 
 // utils
-void		ft_put_str(char *str, int coder_id, int time, t_arg *arg);
+void		ft_put_str(char *str, int coder_id, t_arg *arg);
 int			has_finish(t_arg *arg, t_coders *coder);
 int			ft_get_time(void);
 int			has_burned(t_arg *arg);

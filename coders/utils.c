@@ -6,7 +6,7 @@
 /*   By: sloubiat <sloubiat@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 02:29:01 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/18 02:55:58 by sloubiat         ###   ########.fr       */
+/*   Updated: 2026/04/20 18:19:25 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ int	has_finish(t_arg *arg, t_coders *coder)
 	return (0);
 }
 
-void	ft_put_str(char *str, int coder_id, int time, t_arg *arg)
+void	ft_put_str(char *str, int coder_id, t_arg *arg)
 {
 	pthread_mutex_lock(&arg->config->mutex_console);
-	printf(str, time, coder_id);
+	printf(str, ft_get_time() - arg->start, coder_id);
 	pthread_mutex_unlock(&arg->config->mutex_console);
 }

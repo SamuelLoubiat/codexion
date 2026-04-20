@@ -1,6 +1,6 @@
 NAME        = codexion
 CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -MMD -MP -g
+CFLAGS      = -Wall -Wextra -Werror
 
 THREAD_DIR    = thread
 PARSER_DIR  = parser

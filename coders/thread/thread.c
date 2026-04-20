@@ -6,7 +6,7 @@
 /*   By: sloubiat <sloubiat@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 16:41:47 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/19 17:56:03 by sloubiat         ###   ########lyon.fr   */
+/*   Updated: 2026/04/20 18:19:00 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,13 @@ int	take_dongle(t_arg *arg, t_coders *coders, t_dongle *dongles)
 		pthread_mutex_unlock(&dongles->mutex);
 		return (0);
 	}
-	ft_put_str("%d %d has taken a dongle\n",
-		coders->id, ft_get_time() - arg->start, arg);
+	ft_put_str("%d %d has taken a dongle\n", coders->id, arg);
 	return (1);
 }
 
 void	compile(t_coders *coders, t_arg *arg)
 {
-	ft_put_str("%d %d is compiling\n",
-		coders->id, ft_get_time() - arg->start, arg);
+	ft_put_str("%d %d is compiling\n", coders->id, arg);
 	pthread_mutex_lock(&coders->coder_mutex);
 	coders->last_use = ft_get_time() - arg->start;
 	pthread_mutex_unlock(&coders->coder_mutex);
@@ -49,14 +47,19 @@ int	select_dongle(t_arg *arg, t_dongle *first, t_dongle *second)
 	register_mutex(second, arg->coder);
 	if (!take_dongle(arg, arg->coder, first))
 		return (0);
+	if (first == second)
+	{
+		mutex_unlock(first, arg);
+		return (0);
+	}
 	if (!take_dongle(arg, arg->coder, second))
 	{
 		pthread_mutex_unlock(&first->mutex);
 		return (0);
 	}
 	compile(arg->coder, arg);
-	mutex_unlock(first, arg);
 	mutex_unlock(second, arg);
+	mutex_unlock(first, arg);
 	return (1);
 }
 
@@ -64,13 +67,11 @@ int	debug_refactor(t_arg *arg, t_coders *coders)
 {
 	if (has_burned(arg))
 		return (0);
-	ft_put_str("%d %d is debugging\n",
-		coders->id, ft_get_time() - arg->start, arg);
+	ft_put_str("%d %d is debugging\n", coders->id, arg);
 	usleep((unsigned int) arg->config->time_debug * 1000);
 	if (has_burned(arg))
 		return (0);
-	ft_put_str("%d %d is refactoring\n",
-		coders->id, ft_get_time() - arg->start, arg);
+	ft_put_str("%d %d is refactoring\n", coders->id, arg);
 	usleep((unsigned int) arg->config->time_refactor * 1000);
 	return (1);
 }
@@ -83,7 +84,7 @@ void	thread(t_arg *arg)
 	first = arg->dongle;
 	while (first->id != arg->coder->id)
 		first = first->next;
-	second = first->prev;
+	second = first->next;
 	if (arg->coder->id % 2 == 0)
 	{
 		second = first;
