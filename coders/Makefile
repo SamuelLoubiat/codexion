@@ -66,7 +66,7 @@ clean:
 	@echo "$(GREEN)✔ Clean finished$(RESET)"
 
 fclean: clean
-	@echo "$(RED)Suppression de $(NAME)...$(RESET)"
+	@echo "$(RED)Cleaning of $(NAME)...$(RESET)"
 	@rm -f $(NAME)
 	@echo "$(GREEN)✔ Full clean finished$(RESET)"
 
