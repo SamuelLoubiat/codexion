@@ -6,7 +6,7 @@
 /*   By: sloubiat <sloubiat@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 16:41:47 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/21 19:41:22 by sloubiat         ###   ########lyon.fr   */
+/*   Updated: 2026/04/22 00:20:15 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	thread(t_arg *arg)
 	while (1)
 	{
 		if (has_burned(arg))
-			return ;
+			return (free(arg));
 		if (!select_dongle(arg, first, second))
 			return (free(arg));
 		pthread_mutex_lock(&arg->config->mutex_burn);

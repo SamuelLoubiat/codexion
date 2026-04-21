@@ -6,7 +6,7 @@
 /*   By: sloubiat <sloubiat@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 15:47:43 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/20 18:18:50 by sloubiat         ###   ########lyon.fr   */
+/*   Updated: 2026/04/22 00:19:44 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ t_config	*parse(int argc, char **argv)
 		return (0);
 	if (!check_nb(argv[1]) || !check_nb(argv[2])
 		|| !check_nb(argv[3]) || !check_nb(argv[4])
-		|| !check_nb(argv[5]) || !check_nb(argv[6]) || !check_nb(argv[7]))
+		|| !check_nb(argv[5]) || !check_nb(argv[6]) || !check_nb(argv[7])
+		|| atoi(argv[1]) == 0)
 	{
 		free(config);
 		return (0);

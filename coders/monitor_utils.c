@@ -6,7 +6,7 @@
 /*   By: sloubiat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 03:46:50 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/21 19:57:28 by sloubiat         ###   ########lyon.fr   */
+/*   Updated: 2026/04/22 00:18:41 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	set_queue_order(t_coders *curr, t_dongle *dongle_curr)
 	pthread_mutex_lock(&dongle_curr->queue_mutex);
 	if (last_use == last_use_next)
 	{
-		if (curr->id < curr->next->id && curr->id % 2 == 0)
+		if (curr->id % 2 == 0)
 			set_queue(dongle_curr, curr, 0);
 		else
 			set_queue(dongle_curr, curr, 1);

@@ -57,7 +57,7 @@ $(NAME): $(OBJ)
 	@$(CC) -g3 $(CFLAGS) $(OBJ) -o $(NAME)
 	@echo "\n$(GREEN)✔ $(NAME) has compiled !$(RESET)"
 
-%.o: %.c
+%.o: %.c Makefile header/codexion.h
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
