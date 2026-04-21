@@ -88,14 +88,13 @@ void	monitor(t_arg *arg)
 			break ;
 		if (arg->config->edf)
 			new_sorter(arg);
-		if (interupt > 0)
+		if (interupt == arg->config->number_coders)
 		{
 			pthread_mutex_lock(&arg->config->mutex_burn);
 			arg->config->end = 1;
 			pthread_mutex_unlock(&arg->config->mutex_burn);
-		}
-		if (interupt == arg->config->number_coders)
 			break ;
+		}
 		usleep(100);
 	}
 }
