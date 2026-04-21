@@ -106,8 +106,8 @@ void	thread(t_arg *arg)
 		pthread_mutex_lock(&arg->config->mutex_burn);
 		if (arg->config->end)
 		{
-			free(arg);
 			pthread_mutex_unlock(&arg->config->mutex_burn);
+			free(arg);
 			return ;
 		}
 		pthread_mutex_unlock(&arg->config->mutex_burn);

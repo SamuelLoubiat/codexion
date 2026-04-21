@@ -12,14 +12,14 @@
 
 #include "header/codexion.h"
 
-static t_coders *getcoder(int id, t_arg *arg)
+static t_coders	*getcoder(int id, t_arg *arg)
 {
-	t_coders  *curr;
+	t_coders	*curr;
 
 	curr = arg->coder;
 	while (curr->id != id)
 		curr = curr->next;
-	return curr;
+	return (curr);
 }
 
 void	new_sorter(t_arg *arg)
@@ -27,6 +27,8 @@ void	new_sorter(t_arg *arg)
 	t_dongle	*dongle_curr;
 	t_coders	*curr;
 	int			first_pass;
+	int			last_use;
+	int			last_use_next;
 
 	first_pass = 1;
 	dongle_curr = arg->dongle;
@@ -36,11 +38,15 @@ void	new_sorter(t_arg *arg)
 	while (dongle_curr != arg->dongle || first_pass)
 	{
 		pthread_mutex_lock(&curr->coder_mutex);
+		last_use = curr->last_use;
+		pthread_mutex_unlock(&curr->coder_mutex);
 		pthread_mutex_lock(&curr->next->coder_mutex);
+		last_use_next = curr->next->last_use;
+		pthread_mutex_unlock(&curr->next->coder_mutex);
 		pthread_mutex_lock(&dongle_curr->queue_mutex);
-		if (curr->last_use == curr->next->last_use)
+		if (last_use == last_use_next)
 		{
-			if (curr->id < curr->next->id)
+			if (curr->id < curr->next->id && curr->id % 2 == 0)
 			{
 				dongle_curr->queue[0] = curr->id;
 				dongle_curr->queue[1] = curr->next->id;
@@ -51,18 +57,17 @@ void	new_sorter(t_arg *arg)
 				dongle_curr->queue[0] = curr->next->id;
 			}
 		}
-		else if (curr->last_use < curr->next->last_use)
+		else if (last_use < last_use_next)
 		{
 			dongle_curr->queue[0] = curr->id;
 			dongle_curr->queue[1] = curr->next->id;
 		}
-		else {
+		else
+		{
 			dongle_curr->queue[1] = curr->id;
 			dongle_curr->queue[0] = curr->next->id;
 		}
 		pthread_mutex_unlock(&dongle_curr->queue_mutex);
-		pthread_mutex_unlock(&curr->coder_mutex);
-		pthread_mutex_unlock(&curr->next->coder_mutex);
 		first_pass = 0;
 		dongle_curr = dongle_curr->next;
 		curr = curr->next;
@@ -112,7 +117,7 @@ void	monitor(t_arg *arg)
 	{
 		interupt = check_all_coders(arg);
 		if (interupt == -1)
-			break;
+			break ;
 		if (arg->config->edf)
 			new_sorter(arg);
 		if (interupt > 0)
