@@ -26,7 +26,8 @@ WHITE   = \033[37m
 # ========================================== #
 
 THREAD_SRC    = $(addprefix $(THREAD_DIR)/,\
-					thread.c)
+					thread.c \
+					thread_utils.c)
 
 PARSER_SRC  = $(addprefix $(PARSER_DIR)/,\
 					parser.c \

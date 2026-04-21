@@ -6,7 +6,7 @@
 /*   By: sloubiat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 02:56:08 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/20 18:46:22 by sloubiat         ###   ########lyon.fr   */
+/*   Updated: 2026/04/21 19:57:18 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ void	new_sorter(t_arg *arg)
 	t_dongle	*dongle_curr;
 	t_coders	*curr;
 	int			first_pass;
-	int			last_use;
-	int			last_use_next;
 
 	first_pass = 1;
 	dongle_curr = arg->dongle;
@@ -37,37 +35,7 @@ void	new_sorter(t_arg *arg)
 	curr = getcoder(dongle_curr->id, arg);
 	while (dongle_curr != arg->dongle || first_pass)
 	{
-		pthread_mutex_lock(&curr->coder_mutex);
-		last_use = curr->last_use;
-		pthread_mutex_unlock(&curr->coder_mutex);
-		pthread_mutex_lock(&curr->next->coder_mutex);
-		last_use_next = curr->next->last_use;
-		pthread_mutex_unlock(&curr->next->coder_mutex);
-		pthread_mutex_lock(&dongle_curr->queue_mutex);
-		if (last_use == last_use_next)
-		{
-			if (curr->id < curr->next->id && curr->id % 2 == 0)
-			{
-				dongle_curr->queue[0] = curr->id;
-				dongle_curr->queue[1] = curr->next->id;
-			}
-			else
-			{
-				dongle_curr->queue[1] = curr->id;
-				dongle_curr->queue[0] = curr->next->id;
-			}
-		}
-		else if (last_use < last_use_next)
-		{
-			dongle_curr->queue[0] = curr->id;
-			dongle_curr->queue[1] = curr->next->id;
-		}
-		else
-		{
-			dongle_curr->queue[1] = curr->id;
-			dongle_curr->queue[0] = curr->next->id;
-		}
-		pthread_mutex_unlock(&dongle_curr->queue_mutex);
+		set_queue_order(curr, dongle_curr);
 		first_pass = 0;
 		dongle_curr = dongle_curr->next;
 		curr = curr->next;

@@ -6,7 +6,7 @@
 /*   By: sloubiat <sloubiat@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 16:49:13 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/20 18:45:57 by sloubiat         ###   ########lyon.fr   */
+/*   Updated: 2026/04/21 19:57:09 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,12 +97,14 @@ void		new_sorter(t_arg *arg);
 
 // monitor utils
 void		swap(int *queue);
-void		lock_mutex(t_coders *coders);
-void		unlock_mutex(t_coders *coders);
 void		set_burnout(t_coders *coders, t_arg *arg);
+void		set_queue_order(t_coders *curr, t_dongle *dongle_curr);
 
 // thread
 void		thread(t_arg *arg);
+
+// thread_utils
+void		find_dongle(t_dongle **first, t_dongle **second, t_arg *arg);
 //main
 int			ft_get_time(void);
 

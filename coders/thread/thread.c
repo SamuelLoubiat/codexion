@@ -6,7 +6,7 @@
 /*   By: sloubiat <sloubiat@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 16:41:47 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/20 18:46:06 by sloubiat         ###   ########lyon.fr   */
+/*   Updated: 2026/04/21 19:41:22 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,37 +84,21 @@ void	thread(t_arg *arg)
 	t_dongle	*first;
 	t_dongle	*second;
 
-	first = arg->dongle;
-	while (first->id != arg->coder->id)
-		first = first->next;
-	second = first;
-	first = second->prev;
-	if (arg->coder->id % 2 == 0)
-	{
-		second = first;
-		first = first->next;
-	}
+	find_dongle(&first, &second, arg);
 	while (1)
 	{
 		if (has_burned(arg))
 			return ;
 		if (!select_dongle(arg, first, second))
-		{
-			free(arg);
-			return ;
-		}
+			return (free(arg));
 		pthread_mutex_lock(&arg->config->mutex_burn);
 		if (arg->config->end)
 		{
 			pthread_mutex_unlock(&arg->config->mutex_burn);
-			free(arg);
-			return ;
+			return (free(arg));
 		}
 		pthread_mutex_unlock(&arg->config->mutex_burn);
 		if (!debug_refactor(arg, arg->coder))
-		{
-			free(arg);
-			return ;
-		}
+			return (free(arg));
 	}
 }
