@@ -14,12 +14,10 @@
 
 void	register_mutex(t_dongle *dongle, t_coders *coder)
 {
-	pthread_mutex_lock(&dongle->queue_mutex);
 	if (dongle->queue[0] == 0)
 		dongle->queue[0] = coder->id;
-	else
+	else if (dongle->queue[1] == 0)
 		dongle->queue[1] = coder->id;
-	pthread_mutex_unlock(&dongle->queue_mutex);
 }
 
 int	mutex_lock(t_dongle *dongle, t_arg *arg, t_coders *coder)
@@ -42,6 +40,7 @@ int	mutex_lock(t_dongle *dongle, t_arg *arg, t_coders *coder)
 		return (0);
 	}
 	pthread_mutex_lock(&dongle->queue_mutex);
+	//printf("DONGLE %d 1:%d 2:%d\n", dongle->id, dongle->queue[0], dongle->queue[1]);
 	dongle->queue[0] = dongle->queue[1];
 	dongle->queue[1] = 0;
 	pthread_mutex_unlock(&dongle->queue_mutex);

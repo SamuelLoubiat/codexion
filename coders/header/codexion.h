@@ -93,6 +93,7 @@ int			has_burned(t_arg *arg);
 
 // monitor
 void		monitor(t_arg *arg);
+void	new_sorter(t_arg *arg);
 
 // monitor utils
 void		swap(int *queue);

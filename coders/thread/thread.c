@@ -34,6 +34,8 @@ void	compile(t_coders *coders, t_arg *arg)
 	ft_put_str("%d %d is compiling\n", coders->id, arg);
 	pthread_mutex_lock(&coders->coder_mutex);
 	coders->last_use = ft_get_time() - arg->start;
+	if (coders->last_use == 0)
+		coders->last_use = 1;
 	pthread_mutex_unlock(&coders->coder_mutex);
 	usleep((unsigned int) arg->config->time_compile * 1000);
 	pthread_mutex_lock(&coders->coder_mutex);
@@ -43,15 +45,16 @@ void	compile(t_coders *coders, t_arg *arg)
 
 int	select_dongle(t_arg *arg, t_dongle *first, t_dongle *second)
 {
+	if (first == second)
+		return (0);
+	pthread_mutex_lock(&first->queue_mutex);
+	pthread_mutex_lock(&second->queue_mutex);
 	register_mutex(first, arg->coder);
 	register_mutex(second, arg->coder);
+	pthread_mutex_unlock(&first->queue_mutex);
+	pthread_mutex_unlock(&second->queue_mutex);
 	if (!take_dongle(arg, arg->coder, first))
 		return (0);
-	if (first == second)
-	{
-		mutex_unlock(first, arg);
-		return (0);
-	}
 	if (!take_dongle(arg, arg->coder, second))
 	{
 		pthread_mutex_unlock(&first->mutex);
@@ -84,32 +87,34 @@ void	thread(t_arg *arg)
 	first = arg->dongle;
 	while (first->id != arg->coder->id)
 		first = first->next;
-	second = first->next;
+	second = first;
+	first = second->prev;
 	if (arg->coder->id % 2 == 0)
 	{
 		second = first;
-		first = first->prev;
+		first = first->next;
 	}
-	if (has_burned(arg))
-		return ;
-	if (/*arg->config->number_compile == arg->coder->number_compile
-		||*/ !select_dongle(arg, first, second))
+	while (1)
 	{
-		free(arg);
-		return ;
-	}
-	pthread_mutex_lock(&arg->config->mutex_burn);
-	if (arg->config->end)
-	{
-		free(arg);
+		if (has_burned(arg))
+			return ;
+		if (!select_dongle(arg, first, second))
+		{
+			free(arg);
+			return ;
+		}
+		pthread_mutex_lock(&arg->config->mutex_burn);
+		if (arg->config->end)
+		{
+			free(arg);
+			pthread_mutex_unlock(&arg->config->mutex_burn);
+			return ;
+		}
 		pthread_mutex_unlock(&arg->config->mutex_burn);
-		return ;
+		if (!debug_refactor(arg, arg->coder))
+		{
+			free(arg);
+			return ;
+		}
 	}
-	pthread_mutex_unlock(&arg->config->mutex_burn);
-	if (!debug_refactor(arg, arg->coder))
-	{
-		free(arg);
-		return ;
-	}
-	thread(arg);
 }

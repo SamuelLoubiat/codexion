@@ -81,6 +81,8 @@ int	main(int argc, char **argv)
 	arg.start = start;
 	arg.coder = init_coders(config->number_coders);
 	arg.dongle = init_dongles(config->number_coders);
+	if (config->edf)
+		new_sorter(&arg);
 	pthread_create(&monitor_tread, NULL, (void *) monitor, &arg);
 	if (!execute_all(arg.coder, arg.dongle, start, config))
 		printf("Error\n");
