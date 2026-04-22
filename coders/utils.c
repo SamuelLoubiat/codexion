@@ -47,6 +47,9 @@ int	has_finish(t_arg *arg, t_coders *coder)
 void	ft_put_str(char *str, int coder_id, t_arg *arg)
 {
 	pthread_mutex_lock(&arg->config->mutex_console);
-	printf(str, ft_get_time() - arg->start, coder_id);
+	pthread_mutex_lock(&arg->config->mutex_burn);
+	if (!arg->config->burned)
+		printf(str, ft_get_time() - arg->start, coder_id);
+	pthread_mutex_unlock(&arg->config->mutex_burn);
 	pthread_mutex_unlock(&arg->config->mutex_console);
 }

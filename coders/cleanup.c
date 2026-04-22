@@ -16,7 +16,8 @@ void	free_coders(t_coders *coders)
 {
 	t_coders	*temp;
 
-	coders->prev->next = NULL;
+	if (coders && coders->prev)
+		coders->prev->next = NULL;
 	while (coders)
 	{
 		temp = coders->next;
@@ -30,7 +31,8 @@ void	free_dongles(t_dongle *dongles)
 {
 	t_dongle	*temp;
 
-	dongles->prev->next = NULL;
+	if (dongles && dongles->prev)
+		dongles->prev->next = NULL;
 	while (dongles)
 	{
 		temp = dongles->next;
@@ -39,4 +41,11 @@ void	free_dongles(t_dongle *dongles)
 		free(dongles);
 		dongles = temp;
 	}
+}
+
+void	free_config(t_config *config)
+{
+	pthread_mutex_destroy(&config->mutex_burn);
+	pthread_mutex_destroy(&config->mutex_console);
+	free(config);
 }

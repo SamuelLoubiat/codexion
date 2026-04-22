@@ -11,47 +11,30 @@
 /* ************************************************************************** */
 #include "header/codexion.h"
 
-void	set_coder_default(t_coders *coder, int *id)
-{
-	coder->id = (*id)++;
-	coder->number_compile = 0;
-	coder->last_use = 0;
-	pthread_mutex_init(&coder->coder_mutex, NULL);
-}
-
 t_coders	*init_coders(int nbr)
 {
 	t_coders	*coders;
 	t_coders	*actual;
-	t_coders	*last;
 	int			id;
 
 	id = 1;
 	coders = malloc(sizeof(t_coders));
-	set_coder_default(coders, &id);
+	if (!set_coder_default(coders, &id))
+	{
+		if (coders)
+			free_coders(coders);
+		return (0);
+	}
 	actual = coders;
-	nbr--;
 	while (nbr--)
 	{
-		actual->next = malloc(sizeof(t_coders));
-		last = actual;
+		if (!init_data_coder(coders, actual, &id))
+			return (0);
 		actual = actual->next;
-		set_coder_default(actual, &id);
-		actual->prev = last;
 	}
 	actual->next = coders;
 	coders->prev = actual;
 	return (coders);
-}
-
-void	set_dongle_default(t_dongle *dongle, int *id)
-{
-	dongle->id = (*id)++;
-	dongle->last_use = 0;
-	dongle->queue[0] = 0;
-	dongle->queue[1] = 0;
-	pthread_mutex_init(&dongle->mutex, NULL);
-	pthread_mutex_init(&dongle->queue_mutex, NULL);
 }
 
 t_dongle	*init_dongles(int nbr)
@@ -62,15 +45,18 @@ t_dongle	*init_dongles(int nbr)
 
 	id = 1;
 	dongles = malloc(sizeof(t_dongle));
-	set_dongle_default(dongles, &id);
+	if (!set_dongle_default(dongles, &id))
+	{
+		if (dongles)
+			free_dongles(dongles);
+		return (0);
+	}
 	actual = dongles;
-	nbr--;
 	while (nbr--)
 	{
-		actual->next = malloc(sizeof(t_dongle));
-		actual->next->prev = actual;
+		if (!init_data_dongle(dongles, actual, &id))
+			return (0);
 		actual = actual->next;
-		set_dongle_default(actual, &id);
 	}
 	actual->next = dongles;
 	dongles->prev = actual;

@@ -76,6 +76,14 @@ t_coders	*init_coders(int nbr);
 t_dongle	*init_dongles(int nbr);
 void		init_config(t_config *config, char **argv);
 
+// init_dongle
+int			init_data_dongle(t_dongle *dongles, t_dongle *actual, int *id);
+int			set_dongle_default(t_dongle *dongle, int *id);
+
+// init_coder
+int			init_data_coder(t_coders *coders, t_coders *actual, int *id);
+int			set_coder_default(t_coders *coder, int *id);
+
 // mutex_utils
 void		register_mutex(t_dongle *dongle, t_coders *coder);
 int			mutex_lock(t_dongle *dongle, t_arg *arg, t_coders *coder);
@@ -84,6 +92,7 @@ void		mutex_unlock(t_dongle *dongle, t_arg *arg);
 // cleanup
 void		free_coders(t_coders *coders);
 void		free_dongles(t_dongle *dongles);
+void		free_config(t_config *config);
 
 // utils
 void		ft_put_str(char *str, int coder_id, t_arg *arg);
@@ -105,7 +114,5 @@ void		thread(t_arg *arg);
 
 // thread_utils
 void		find_dongle(t_dongle **first, t_dongle **second, t_arg *arg);
-//main
-int			ft_get_time(void);
 
 #endif

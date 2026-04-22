@@ -1,6 +1,6 @@
 NAME        = codexion
 CC          = cc
-CFLAGS      = -Wall -Wextra -Werror
+CFLAGS      = -Wall -Wextra -Werror -pthread -fsanitize=thread
 
 THREAD_DIR    = thread
 PARSER_DIR  = parser
@@ -33,7 +33,7 @@ PARSER_SRC  = $(addprefix $(PARSER_DIR)/,\
 					parser.c \
 					parser_utils.c)
 
-SRC = main.c cleanup.c init.c monitor.c monitor_utils.c mutex_utils.c utils.c $(THREAD_SRC) $(PARSER_SRC)
+SRC = main.c cleanup.c init.c init_dongle.c init_coder.c monitor.c monitor_utils.c mutex_utils.c utils.c $(THREAD_SRC) $(PARSER_SRC)
 
 OBJ = $(SRC:.c=.o)
 DEP = $(OBJ:.o=.d)

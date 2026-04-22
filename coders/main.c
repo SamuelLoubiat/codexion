@@ -58,7 +58,7 @@ void	end(t_arg *arg, pthread_t	monitor_tread)
 	pthread_join(monitor_tread, NULL);
 	pthread_mutex_destroy(&arg->config->mutex_console);
 	pthread_mutex_destroy(&arg->config->mutex_burn);
-	free(arg->config);
+	free_config(arg->config);
 	free_coders(arg->coder);
 	free_dongles(arg->dongle);
 }
@@ -74,13 +74,26 @@ int	main(int argc, char **argv)
 	config = parse(argc, argv);
 	if (!config)
 	{
-		printf("Error");
+		printf("Error\n");
 		return (0);
 	}
 	arg.config = config;
 	arg.start = start;
-	arg.coder = init_coders(config->number_coders);
-	arg.dongle = init_dongles(config->number_coders);
+	arg.coder = init_coders(config->number_coders - 1);
+	if (!arg.coder)
+	{
+		free_config(config);
+		printf("Error\n");
+		return (0);
+	}
+	arg.dongle = init_dongles(config->number_coders - 1);
+	if (!arg.dongle)
+	{
+		free_coders(arg.coder);
+		free_config(config);
+		printf("Error\n");
+		return (0);
+	}
 	if (config->edf)
 		new_sorter(&arg);
 	pthread_create(&monitor_tread, NULL, (void *) monitor, &arg);
