@@ -6,7 +6,7 @@
 /*   By: sloubiat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 03:46:50 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/22 00:18:41 by sloubiat         ###   ########lyon.fr   */
+/*   Updated: 2026/04/23 14:42:03 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ void	set_burnout(t_coders *coders, t_arg *arg)
 	pthread_mutex_lock(&arg->config->mutex_burn);
 	arg->config->burned = 1;
 	pthread_mutex_unlock(&arg->config->mutex_burn);
-	ft_put_str("%d %d burned out\n", coders->id, arg);
+	pthread_mutex_lock(&arg->config->mutex_console);
+	printf("%lld %d burned out\n", ft_get_time() - arg->start, coders->id);
+	pthread_mutex_unlock(&arg->config->mutex_console);
 }
 
 void	set_queue(t_dongle *dongle_curr, t_coders *curr, int reverse)

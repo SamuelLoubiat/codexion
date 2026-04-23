@@ -6,7 +6,7 @@
 /*   By: sloubiat <sloubiat@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 19:34:50 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/21 19:41:37 by sloubiat         ###   ########lyon.fr   */
+/*   Updated: 2026/04/23 14:41:36 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,6 @@ void	find_dongle(t_dongle **first, t_dongle **second, t_arg *arg)
 	{
 		*second = *first;
 		*first = (*first)->next;
+		usleep(1000);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: sloubiat <sloubiat@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/13 18:06:02 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/19 17:55:51 by sloubiat         ###   ########lyon.fr   */
+/*   Updated: 2026/04/23 14:41:43 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,41 +63,42 @@ void	end(t_arg *arg, pthread_t	monitor_tread)
 	free_dongles(arg->dongle);
 }
 
+int	load_config(int argc, char **argv, t_arg *arg)
+{
+	arg->config = parse(argc, argv);
+	if (!arg->config)
+		return (0);
+	arg->start = ft_get_time();
+	arg->coder = init_coders(arg->config->number_coders - 1);
+	if (!arg->coder)
+	{
+		free_config(arg->config);
+		return (0);
+	}
+	arg->dongle = init_dongles(arg->config->number_coders - 1);
+	if (!arg->dongle)
+	{
+		free_coders(arg->coder);
+		free_config(arg->config);
+		return (0);
+	}
+	return (1);
+}
+
 int	main(int argc, char **argv)
 {
-	long long	start;
-	t_config	*config;
 	pthread_t	monitor_tread;
 	t_arg		arg;
 
-	start = ft_get_time();
-	config = parse(argc, argv);
-	if (!config)
+	if (!load_config(argc, argv, &arg))
 	{
 		printf("Error\n");
 		return (0);
 	}
-	arg.config = config;
-	arg.start = start;
-	arg.coder = init_coders(config->number_coders - 1);
-	if (!arg.coder)
-	{
-		free_config(config);
-		printf("Error\n");
-		return (0);
-	}
-	arg.dongle = init_dongles(config->number_coders - 1);
-	if (!arg.dongle)
-	{
-		free_coders(arg.coder);
-		free_config(config);
-		printf("Error\n");
-		return (0);
-	}
-	if (config->edf)
+	if (arg.config->edf)
 		new_sorter(&arg);
 	pthread_create(&monitor_tread, NULL, (void *) monitor, &arg);
-	if (!execute_all(arg.coder, arg.dongle, start, config))
+	if (!execute_all(arg.coder, arg.dongle, arg.start, arg.config))
 		printf("Error\n");
 	end(&arg, monitor_tread);
 	return (0);

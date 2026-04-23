@@ -6,7 +6,7 @@
 /*   By: sloubiat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/18 02:56:08 by sloubiat          #+#    #+#             */
-/*   Updated: 2026/04/21 19:57:18 by sloubiat         ###   ########lyon.fr   */
+/*   Updated: 2026/04/23 14:41:52 by sloubiat         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,13 @@ void	monitor(t_arg *arg)
 
 	while (1)
 	{
+		pthread_mutex_lock(&arg->config->mutex_burn);
+		if (arg->config->burned)
+		{
+			pthread_mutex_unlock(&arg->config->mutex_burn);
+			break ;
+		}
+		pthread_mutex_unlock(&arg->config->mutex_burn);
 		interupt = check_all_coders(arg);
 		if (interupt == -1)
 			break ;
