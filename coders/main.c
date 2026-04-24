@@ -72,9 +72,7 @@ void	end(t_arg *arg, pthread_t	monitor_tread)
 		curr = curr->next;
 	}
 	pthread_join(monitor_tread, NULL);
-	free_config(arg->config);
-	free_coders(arg->coder);
-	free_dongles(arg->dongle);
+	free_all(arg->config, arg->dongle, arg->coder);
 }
 
 int	load_config(int argc, char **argv, t_arg *arg)
@@ -107,6 +105,11 @@ int	main(int argc, char **argv)
 	if (!load_config(argc, argv, &arg))
 	{
 		printf("Error\n");
+		return (0);
+	}
+	if (arg.config->number_compile == 0)
+	{
+		free_all(arg.config, arg.dongle, arg.coder);
 		return (0);
 	}
 	if (arg.config->edf)

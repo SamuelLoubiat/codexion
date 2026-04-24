@@ -93,6 +93,7 @@ void		mutex_unlock(t_dongle *dongle, t_arg *arg);
 void		free_coders(t_coders *coders);
 void		free_dongles(t_dongle *dongles);
 void		free_config(t_config *config);
+void		free_all(t_config *config, t_dongle *dongles, t_coders *coders);
 
 // utils
 void		ft_put_str(char *str, int coder_id, t_arg *arg);

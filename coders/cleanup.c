@@ -49,3 +49,10 @@ void	free_config(t_config *config)
 	pthread_mutex_destroy(&config->mutex_console);
 	free(config);
 }
+
+void	free_all(t_config *config, t_dongle *dongles, t_coders *coders)
+{
+	free_config(config);
+	free_dongles(dongles);
+	free_coders(coders);
+}
