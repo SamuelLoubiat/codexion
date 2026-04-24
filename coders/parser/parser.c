@@ -51,7 +51,7 @@ t_config	*parse(int argc, char **argv)
 	if (!check_nb(argv[1]) || !check_nb(argv[2])
 		|| !check_nb(argv[3]) || !check_nb(argv[4])
 		|| !check_nb(argv[5]) || !check_nb(argv[6]) || !check_nb(argv[7])
-		|| atoi(argv[1]) == 0 || atoi(argv[6]) == 0)
+		|| atoi(argv[1]) == 0)
 		return (free_conf(config));
 	if (ft_strcmp(argv[8], "fifo") != 0 && ft_strcmp(argv[8], "edf") != 0)
 		return (free_conf(config));
