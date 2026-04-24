@@ -63,7 +63,7 @@ t_dongle	*init_dongles(int nbr)
 	return (dongles);
 }
 
-void	init_config(t_config *config, char **argv)
+int	init_config(t_config *config, char **argv)
 {
 	config->number_coders = ft_atoi(argv[1]);
 	config->time_burnout = ft_atoi(argv[2]);
@@ -74,10 +74,20 @@ void	init_config(t_config *config, char **argv)
 	config->dongle_cooldown = ft_atoi(argv[7]);
 	config->burned = 0;
 	config->end = 0;
-	pthread_mutex_init(&config->mutex_console, NULL);
-	pthread_mutex_init(&config->mutex_burn, NULL);
+	if (pthread_mutex_init(&config->mutex_console, NULL) != 0)
+	{
+		free_config(config);
+		return (0);
+	}
+	if (pthread_mutex_init(&config->mutex_burn, NULL) != 0)
+	{
+		pthread_mutex_destroy(&config->mutex_console);
+		free(config);
+		return (0);
+	}
 	if (ft_strcmp(argv[8], "edf") == 0)
 		config->edf = 1;
 	else
 		config->edf = 0;
+	return (1);
 }

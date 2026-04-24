@@ -74,7 +74,7 @@ int			ft_strcmp(const char *s1, const char *s2);
 // init
 t_coders	*init_coders(int nbr);
 t_dongle	*init_dongles(int nbr);
-void		init_config(t_config *config, char **argv);
+int			init_config(t_config *config, char **argv);
 
 // init_dongle
 int			init_data_dongle(t_dongle *dongles, t_dongle *actual, int *id);

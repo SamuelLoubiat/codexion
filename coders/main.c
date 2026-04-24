@@ -12,6 +12,23 @@
 
 #include "header/codexion.h"
 
+int	start_coders(t_config *config, t_coders *coders, t_dongle *dongles,
+	t_arg *arg)
+{
+	arg->coder = coders;
+	arg->dongle = dongles;
+	arg->config = config;
+	if (pthread_create(&coders->thread, NULL, (void *) thread, arg) != 0)
+	{
+		pthread_mutex_lock(&config->mutex_burn);
+		config->burned = 1;
+		pthread_mutex_unlock(&config->mutex_burn);
+		free(arg);
+		return (0);
+	}
+	return (1);
+}
+
 int	execute_all(t_coders *coders, t_dongle *dongles,
 	long long start, t_config *config)
 {
@@ -32,11 +49,9 @@ int	execute_all(t_coders *coders, t_dongle *dongles,
 			pthread_mutex_unlock(&config->mutex_burn);
 			return (0);
 		}
-		arg->coder = curr;
-		arg->dongle = dongles;
 		arg->start = start;
-		arg->config = config;
-		pthread_create(&curr->thread, NULL, (void *) thread, arg);
+		if (!start_coders(config, curr, dongles, arg))
+			return (0);
 		curr = curr->next;
 	}
 	return (1);
@@ -52,12 +67,11 @@ void	end(t_arg *arg, pthread_t	monitor_tread)
 	while (curr != arg->coder || first_pass)
 	{
 		first_pass = 0;
-		pthread_join(curr->thread, NULL);
+		if (curr->thread)
+			pthread_join(curr->thread, NULL);
 		curr = curr->next;
 	}
 	pthread_join(monitor_tread, NULL);
-	pthread_mutex_destroy(&arg->config->mutex_console);
-	pthread_mutex_destroy(&arg->config->mutex_burn);
 	free_config(arg->config);
 	free_coders(arg->coder);
 	free_dongles(arg->dongle);
@@ -97,8 +111,12 @@ int	main(int argc, char **argv)
 	}
 	if (arg.config->edf)
 		new_sorter(&arg);
-	pthread_create(&monitor_tread, NULL, (void *) monitor, &arg);
-	if (!execute_all(arg.coder, arg.dongle, arg.start, arg.config))
+	if (pthread_create(&monitor_tread, NULL, (void *) monitor, &arg) == 0)
+	{
+		if (!execute_all(arg.coder, arg.dongle, arg.start, arg.config))
+			printf("Error\n");
+	}
+	else
 		printf("Error\n");
 	end(&arg, monitor_tread);
 	return (0);

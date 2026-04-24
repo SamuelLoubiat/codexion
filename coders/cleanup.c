@@ -45,6 +45,7 @@ void	free_dongles(t_dongle *dongles)
 
 void	free_config(t_config *config)
 {
+	printf("free_config\n");
 	pthread_mutex_destroy(&config->mutex_burn);
 	pthread_mutex_destroy(&config->mutex_console);
 	free(config);

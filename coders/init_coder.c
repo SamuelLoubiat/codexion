@@ -21,6 +21,7 @@ int	set_coder_default(t_coders *coder, int *id)
 	coder->last_use = 0;
 	coder->prev = 0;
 	coder->next = 0;
+	coder->thread = 0;
 	if (pthread_mutex_init(&coder->coder_mutex, NULL))
 		return (0);
 	return (1);
